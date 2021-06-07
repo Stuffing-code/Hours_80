@@ -1,4 +1,4 @@
-package hours_80.dz1;
+package dz1;
 
 public class Root_search {
     //    (a*(x**2)) + (b*x) + c == 0

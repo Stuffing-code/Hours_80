@@ -1,4 +1,4 @@
-package hours_80.dz2;
+package dz2;
 
 import java.util.Collections;
 import java.util.LinkedList;

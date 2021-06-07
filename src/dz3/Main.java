@@ -1,4 +1,4 @@
-package hours_80.dz3;
+package dz3;
 
 import java.util.HashMap;
 import java.util.Map;

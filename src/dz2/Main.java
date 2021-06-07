@@ -1,9 +1,9 @@
-package hours_80.dz2;
+package dz2;
 
 import java.util.LinkedList;
 import java.util.Random;
 
-import static hours_80.dz2.List_creator.*;
+import static dz2.List_creator.*;
 
 /*
 Реализовать цикл, который будет 100 раз вызывать созданный вами метод fifo и будет передавать ему в аргументы
@@ -15,7 +15,7 @@ import static hours_80.dz2.List_creator.*;
 public class Main {
     public static void main(String[] args) {
         LinkedList<Integer> list = new LinkedList<>();
-        List_creator list_creator = new List_creator(8);
+        dz2.List_creator list_creator = new dz2.List_creator(8);
         for (int i = 0; i < 100; i++) {
             list_creator.fifo(list, randomNumber());
         }
