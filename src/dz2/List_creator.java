@@ -53,7 +53,7 @@ public class List_creator {
     }
 
     // display array on the console
-    public  void displayList(LinkedList<Integer> list) {
+    private   void displayList(LinkedList<Integer> list) {
 //        System.out.print("List_creator: displayList(): [");
         System.out.print("[");
         for (int i = 0; i < list.size(); i++) {
@@ -66,7 +66,6 @@ public class List_creator {
         System.out.print("] -> ");
     }
 
-    // TODO: насколько это целесообразно?
     public void printUnsortedPart(LinkedList<Integer> list) {
         displayList(list);
     }
