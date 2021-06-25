@@ -76,15 +76,17 @@ public class List_creator {
 
     }
 
-    public  void printMedianValue(LinkedList<Integer> list_temp, int number) {
+    public  void printMedianValue(LinkedList<Integer> list_temp) {
+        var index_1 = list_temp.size() / 2;
+        var index_2 = (list_temp.size() / 2) - 1;
         if (getSizeBuffer() % 2 == 0) {
-            boolean check = checkMedian_type(list_temp.get(4), list_temp.get(3));
+            boolean check = checkMedian_type(list_temp.get(index_1), list_temp.get(index_2));
             if (check) {
-                //            System.out.println("List_creator: fifo(): " + solveMedianDouble(list_temp.get(4), list_temp.get(3)));
-                System.out.println("[" + solveMedianDouble(list_temp.get(4), list_temp.get(3)) + "]");
+                //            System.out.println("List_creator: fifo(): " + solveMedianDouble(list_temp.get(index_1), list_temp.get(index_2)));
+                System.out.println("[" + solveMedianDouble(list_temp.get(index_1), list_temp.get(index_2)) + "]");
             } else {
-                //            System.out.println("List_creator: fifo(): " + solveMedianInt(list_temp.get(4), list_temp.get(3)));
-                System.out.println("[" + solveMedianInt(list_temp.get(4), list_temp.get(3)) + "]");
+                //            System.out.println("List_creator: fifo(): " + solveMedianInt(list_temp.get(index_1), list_temp.get(index_2)));
+                System.out.println("[" + solveMedianInt(list_temp.get(index_1), list_temp.get(index_2)) + "]");
             }
         } else {
             System.out.println(returnMedianArray(list_temp));
@@ -97,7 +99,7 @@ public class List_creator {
             LinkedList<Integer> list_temp = new LinkedList<>(list); // create temp array
             printUnsortedPart(list);
             printSortedPart(list_temp);
-            printMedianValue(list_temp, number);
+            printMedianValue(list_temp);
             list.pop(); // remove first element
         }
         list.add(count, number);

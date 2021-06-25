@@ -24,6 +24,11 @@ public class Main {
         for (int i = 0; i < 100; i++) {
             list_creator.fifo(list, randomNumber());
         }
+
+        list_creator.setSizeBuffer(2);
+        for (int i = 0; i < 100; i++) {
+            list_creator.fifo(list, randomNumber());
+        }
     }
 
 
