@@ -29,7 +29,7 @@ public class Parser {
         for (Element el :
                 elements_page) {
 //            System.out.println("Parser: createListMoney() " + el.text());
-            //todo Нужно придумат ькоректное регулярное выражение
+            //todo Нужно придумать коректное регулярное выражение
             money_list.add(el.text().replaceAll("[^0-9]", ""));
         }
         return money_list;
