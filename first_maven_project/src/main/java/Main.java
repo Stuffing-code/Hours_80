@@ -6,25 +6,23 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException {
         String cssQuery_money = "span[data-qa=vacancy-serp__vacancy-compensation]";
-        String cssQuery_urls_vakans = "a[class=bloko-link]";
-//        ArrayList<String> list_money = new ArrayList<>();
+//        String cssQuery_urls_vakans = "a[class=bloko-link]";
+        String xpath_search = "/html/body/div[5]/div[3]/div/div/div[3]/div/div/form/div/div[1]/div/input";
+        String xpath_button = "/html/body/div[5]/div[3]/div/div/div[3]/div/div/form/div/div[2]/button/span[2]";
 
         ChromeStart chr = new ChromeStart();
-        chr.openSite("https://hh.ru/");
-
-        String xpath_search = "/html/body/div[5]/div[3]/div/div/div[3]/div/div/form/div/div[1]/div/input";
-        chr.sendTextSearch("Ruby", xpath_search);
-
-        chr.clickButtonXpath("/html/body/div[5]/div[3]/div/div/div[3]/div/div/form/div/div[2]/button/span[2]");
-
-
         Parser parser = new Parser();
-
         ArrayList<String> list_money = new ArrayList<>();
+
+        chr.openSite("https://hh.ru/");
+        chr.sendTextSearch("Ruby", xpath_search);
+        chr.clickButtonXpath(xpath_button);
+
         try {
             // получаем урл страницы
             while (true) {
                 // получаем урл страницы
+//                chr.timeOutdriver();
                 String currentUrl = chr.currentUrl();
                 // парсим страницу
                 Document page_parse = parser.getPage(currentUrl);

@@ -2,6 +2,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.concurrent.TimeUnit;
+
 public class ChromeStart {
 
     WebDriver driver;
@@ -26,12 +28,16 @@ public class ChromeStart {
         driver.quit();
     }
 
+    public void timeOutdriver() {
+        driver.manage().timeouts().implicitlyWait(10 , TimeUnit.SECONDS);
+    }
+
     public void clickButtonByLinkText(String text) {
         driver.findElement(By.linkText(text)).click();
     }
 
     public void clickButtonXpath(String button_xpath) {
-//        driver.manage().timeouts().implicitlyWait(2 , TimeUnit.SECONDS);
+
         driver.findElement(By.xpath(button_xpath)).click();
     }
 
