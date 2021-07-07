@@ -2,14 +2,13 @@ import java.util.ArrayList;
 
 public class AtherMethod {
 
-
     //среднеарифмет из строки
     public static Integer average(ArrayList<String> value) {
         int result;
         result = (int) (Integer.parseInt(value.get(1)) - Integer.parseInt(value.get(0))) / 2;
+        System.out.println("AtherMethod() avarage(): " + result);
         return result;
     }
-
 
     //фильтр на совпадение только цифровых строчек
     public static boolean checkMatchesNumerical(String text) {
@@ -25,7 +24,6 @@ public class AtherMethod {
     public static ArrayList<String> createArray(String[] array) {
         ArrayList<String> list_value = new ArrayList<>();
 
-
         for (int i = 0; i < array.length; i++) {
 
             String value = replaceAllStringFilterNoSpace(array[i]);
@@ -39,7 +37,7 @@ public class AtherMethod {
 
     // проверка длины строки и вызов среднеарифмет если надо
     public static Integer checkStringSizeArray(ArrayList<String> array) {
-//        System.out.println("list_value  =  " + list_value.toString());
+        System.out.println("AtherMethod() checkStringSizeArray() " + array.toString());
         if (array.size() > 1) {
             return average(array);
         } else {
@@ -53,40 +51,39 @@ public class AtherMethod {
         int usd = 74;
         int result;
         result = Integer.parseInt(text) * usd;
-        System.out.println("CONVERT_USD()");
-        System.out.println("result = " + result);
+        System.out.println("AtherMethod() CONVERT_USD()  = " + result);
+//        System.out.println("result = " + result);
         return String.valueOf(result);
     }
 
     // конвертор валюты
     private static String convertEur(String text) {
-        int usd = 87;
+        int eur = 87;
         int result;
-        result = Integer.parseInt(text) * usd;
-        System.out.println("CONVERT_EUR()");
+        result = Integer.parseInt(text) * eur;
+        System.out.println("AtherMethod() CONVERT_EUR()" + result);
         System.out.println("result = " + result);
         return String.valueOf(result);
     }
-
 
 
     //проверка какая валюта и если необходимо конвертация в рубли
     public static String valueCheck(String[] array_string, String value) {
         String result = null;
 
-        for (int i = 0; i < array_string.length; i++) {
-            String check_string = array_string[i].replaceAll("\\d+", "");
-            String no_space_number_string = replaceAllStringFilterNoSpace(array_string[i]);
-            if (check_string.equals("USD")) {
-                System.out.println("USD");
+        for (String s : array_string) {
+            String check_string = s.replaceAll("\\d+", "");
+            String no_space_number_string = replaceAllStringFilterNoSpace(s);
+            if (check_string.contains("USD")) {
+                System.out.println("AtherMethod() valueCheck(): USD");
                 result = convertUSD(value);
                 break;
-            } else if (check_string.equals("EUR")) {
-                System.out.println("EUR");
+            } else if (check_string.contains("EUR")) {
+                System.out.println("AtherMethod() valueCheck(): EUR");
                 result = convertEur(value);
                 break;
-            } else if (check_string.equals("руб.")) {
-                System.out.println("RUB");
+            } else if (check_string.contains("руб.")) {
+                System.out.println("AtherMethod() valueCheck(): RUB");
                 result = value;
                 break;
             }
