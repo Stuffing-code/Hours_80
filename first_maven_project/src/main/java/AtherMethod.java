@@ -7,10 +7,10 @@ public class AtherMethod {
         int result;
         if (Integer.parseInt(value.get(1)) == Integer.parseInt(value.get(0))) {
             result = Integer.parseInt(value.get(1));
-            System.out.println("AtherMethod() avarage(value ==): " + result);
+//            System.out.println("AtherMethod() avarage(value ==): " + result);
         } else {
             result = (int) (Integer.parseInt(value.get(1)) - Integer.parseInt(value.get(0))) / 2;
-            System.out.println("AtherMethod() avarage(): " + result);
+//            System.out.println("AtherMethod() avarage(): " + result);
         }
         return result;
     }
@@ -42,7 +42,7 @@ public class AtherMethod {
 
     // проверка длины строки и вызов среднеарифмет если надо
     public static Integer checkStringSizeArray(ArrayList<String> array) {
-        System.out.println("AtherMethod() checkStringSizeArray() " + array.toString());
+//        System.out.println("AtherMethod() checkStringSizeArray() " + array.toString());
         if (array.size() > 1) {
             return average(array);
         } else {
@@ -56,7 +56,7 @@ public class AtherMethod {
         int usd = 74;
         int result;
         result = Integer.parseInt(text) * usd;
-        System.out.println("AtherMethod() CONVERT_USD()  = " + result);
+//        System.out.println("AtherMethod() CONVERT_USD()  = " + result);
 //        System.out.println("result = " + result);
         return String.valueOf(result);
     }
@@ -66,8 +66,8 @@ public class AtherMethod {
         int eur = 87;
         int result;
         result = Integer.parseInt(text) * eur;
-        System.out.println("AtherMethod() CONVERT_EUR()" + result);
-        System.out.println("result = " + result);
+//        System.out.println("AtherMethod() CONVERT_EUR()" + result);
+//        System.out.println("result = " + result);
         return String.valueOf(result);
     }
 
@@ -80,15 +80,15 @@ public class AtherMethod {
             String check_string = s.replaceAll("\\d+", "");
             String no_space_number_string = replaceAllStringFilterNoSpace(s);
             if (check_string.contains("USD")) {
-                System.out.println("AtherMethod() valueCheck(): USD");
+//                System.out.println("AtherMethod() valueCheck(): USD");
                 result = convertUSD(value);
                 break;
             } else if (check_string.contains("EUR")) {
-                System.out.println("AtherMethod() valueCheck(): EUR");
+//                System.out.println("AtherMethod() valueCheck(): EUR");
                 result = convertEur(value);
                 break;
             } else if (check_string.contains("руб.")) {
-                System.out.println("AtherMethod() valueCheck(): RUB");
+//                System.out.println("AtherMethod() valueCheck(): RUB");
                 result = value;
                 break;
             }

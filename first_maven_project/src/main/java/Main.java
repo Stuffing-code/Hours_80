@@ -11,40 +11,62 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException {
         String cssQuery_money = "span[data-qa=vacancy-serp__vacancy-compensation]";
-        String cssQuery_bloko_link = "a[class=bloko_link";
+        String cssQuery_title_and_url = "a[data-qa=vacancy-serp__vacancy-title]";
+        String cssQuery_all = "div[class=vacancy-serp-item__sidebar]";
+        String cssQuery_tag_list = "span[data-qa=bloko-tag__text]";
 
         String xpath_search = "/html/body/div[5]/div[3]/div/div/div[3]/div/div/form/div/div[1]/div/input";
         String xpath_button = "/html/body/div[5]/div[3]/div/div/div[3]/div/div/form/div/div[2]/button/span[2]";
 
         WorkDriver chr = new WorkDriver();
-        ArrayList<String> list_money = new ArrayList<>();
+        ArrayList<String> list_money_solve_median = new ArrayList<>();
+        ArrayList<String> list_money_and_null_value = new ArrayList<>();
+        ArrayList<String> list_urls_vacancy = new ArrayList<>();
+        ArrayList<String> list_title_vacancy = new ArrayList<>();
 
         chr.openSite("https://hh.ru/");
-        chr.sendTextSearch("Pascal", xpath_search);
+        chr.sendTextSearch("Delphi", xpath_search);
         chr.clickButtonXpath(xpath_button);
 
         try {
             // получаем урл страницы
             while (true) {
-                // парсим страницу
-                list_money = chr.createListMoney(cssQuery_money);
-                // парсим на наличие ссылок на вакансии
-                chr.createListUrl(cssQuery_bloko_link);
+                // парсим страницу для задания
+                list_money_solve_median = chr.createListMoney(cssQuery_money);
+
+
+                // парсим ссылоки на вакансии
+                chr.createListUrlAndTitleVacancy(cssQuery_title_and_url);
+                list_urls_vacancy = WorkDriver.getUrl_list();
+                list_title_vacancy = WorkDriver.getTitle_list();
+                // парсим для получения списка зп включая их отсутсвие
+                list_money_and_null_value = chr.createListMoneAndNullValue(cssQuery_all);
+
+                // парсим на названия
                 // переходим дальше
                 chr.clickButtonByLinkText("дальше");
             }
         } catch (org.openqa.selenium.NoSuchElementException e) {
             System.out.println("end page");
-        } finally {
-            chr.quit();
         }
 
-        // отоброжение масива
-        String s = list_money.toString();
+        // отоброжение масива и медианы зарплат
+        String s = list_money_solve_median.toString();
+
         System.out.println(s);
 
-        Median.printMedianValue(list_money);
+        Median.printMedianValue(list_money_solve_median);
 
+
+        // визуализация вакансий ссылок на них и зарплат, а также список ключевых навыков
+        for (int i = 0; i < list_urls_vacancy.size(); i++) {
+            System.out.println((i + 1) + ") " + list_title_vacancy.get(i));
+            System.out.println("\tURL: " + list_urls_vacancy.get(i));
+            System.out.println("\tЗаработная плата: " + list_money_and_null_value.get(i));
+            System.out.print("\tКлючевые навыки: ");
+            chr.createTagList(list_urls_vacancy.get(i), cssQuery_tag_list);
+            System.out.println("\n");
+        }
 
     }
 }
