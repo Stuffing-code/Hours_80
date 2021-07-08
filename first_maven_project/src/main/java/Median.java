@@ -30,13 +30,14 @@ public class Median {
             boolean check = checkMedian_type(Integer.parseInt(arrayList.get(index_1)), Integer.parseInt(arrayList.get(index_2)));
             if (check) {
                 //            System.out.println("List_creator: fifo(): " + solveMedianDouble(list_temp.get(index_1), list_temp.get(index_2)));
-                System.out.println("Медиана зарплат " + + solveMedianDouble(Integer.parseInt(arrayList.get(index_1)), Integer.parseInt(arrayList.get(index_2))) + " рублей.");
+                System.out.println(solveMedianDouble(Integer.parseInt(arrayList.get(index_1)), Integer.parseInt(arrayList.get(index_2))) + " рублей.");
             } else {
                 //            System.out.println("List_creator: fifo(): " + solveMedianInt(list_temp.get(index_1), list_temp.get(index_2)));
-                System.out.println("Медиана зарплат " + solveMedianInt(Integer.parseInt(arrayList.get(index_1)), Integer.parseInt(arrayList.get(index_2))) + " рублей.");
+                System.out.println(solveMedianInt(Integer.parseInt(arrayList.get(index_1)), Integer.parseInt(arrayList.get(index_2))) + " рублей.");
             }
         } else {
-            System.out.println("Медиана зарплат " + returnMedianArray(arrayList) + " рублей.");
+            System.out.println(returnMedianArray(arrayList) + " рублей.");
         }
     }
+
 }

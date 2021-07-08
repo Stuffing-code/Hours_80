@@ -1,6 +1,5 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -10,8 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class WorkDriver {
@@ -23,7 +21,13 @@ public class WorkDriver {
     private static ArrayList<String> money_list = new ArrayList<>();
     private static ArrayList<String> tag_list = new ArrayList<>();
     private static final String ZP = "Не указана.";
+    private static HashSet<String> tag_link = new HashSet<>();
+    private  HashMap<String, List<String>> dir_tag_and_value = new HashMap<>();
 
+
+    public static HashSet<String> getTag_link() {
+        return tag_link;
+    }
 
     public static ArrayList<String> getUrl_list() {
         return url_list;
@@ -79,8 +83,12 @@ public class WorkDriver {
 
     }
 
-    public void createTagList(String url_search, String cssQuery) throws IOException {
-        Elements elements_page = getPage(url_search).select(cssQuery);
+    public Elements createElements(String url_search, String cssQuery) throws IOException {
+        return getPage(url_search).select(cssQuery);
+    }
+
+    // create Tag List и вывод сообщения на консоль при необходимости
+    public void createTagList(Elements elements_page) {
 
         for (int i = 0; i < elements_page.size(); i++) {
             if (i < elements_page.size() - 1) {
@@ -88,12 +96,56 @@ public class WorkDriver {
             } else {
                 System.out.print(elements_page.get(i).text() + ".");
             }
+            tag_link.add(elements_page.get(i).text());
+
         }
 //
 //        for (Element el :
 //                elements_page) {
 //            System.out.print(el.text() + " ");
 //        }
+    }
+
+    public HashMap<String, List<String>> createDir(HashSet<String> hashMap, ArrayList<String> urls, String cssQuery_tag_list_contains, String cssQuery_tag_zp) throws IOException {
+        for (String tag :
+                hashMap) {
+//            System.out.println("WebDriver() createDir(): начало проверки тэга " + tag);
+            System.out.println("Начало проверки тэга " + tag);
+            ArrayList<String> tag_money = new ArrayList<>();
+            for (int i = 0; i < urls.size(); i++) {
+                boolean flag = createElements(urls.get(i), cssQuery_tag_list_contains).text().contains(tag);
+                if (flag) {
+                    String[] value = createElements(urls.get(i), cssQuery_tag_zp).text().split("до");
+                    if (!createElements(urls.get(i), cssQuery_tag_zp).text().equals("з/п не указана")) {
+                        ArrayList<String> array = AtherMethod.createArray(value);
+
+//                        System.out.println("WebDriver() createDir() value_list :" + array.toString());
+                        tag_money.addAll(Collections.singleton(String.valueOf(AtherMethod.checkStringSizeArray(array))));
+//                        System.out.println("WebDriver() createDir():"  + tag_money.toString());
+
+                        dir_tag_and_value.put(tag, tag_money);
+                    }
+                }
+            }
+        }
+        return dir_tag_and_value;
+    }
+
+    public void printDirKeyAndValue(HashMap<String, List<String>> dir, ArrayList<String> arrayMedian) {
+        dir.forEach((key, value) -> {
+            System.out.print("У ключевого навыка " + key + " выборка зарплат зарплаты: ");
+            for (int i = 0; i < value.size(); i++) {
+                if (i < value.size() -1) {
+                    System.out.print(value.get(i) + ", ");
+                } else {
+                    System.out.print(value.get(i) + " рублей.");
+                }
+            }
+            System.out.println();
+            System.out.print("\tПри учете медианы зарплат на данный запрос = ");
+            Median.printMedianValue(arrayMedian);
+            System.out.println();
+        });
     }
 
     // массив зарплат
@@ -105,7 +157,10 @@ public class WorkDriver {
                 list_link) {
 
             String[] arrays_strings = el.getText().split(" ");
-
+            for (String string :
+                    arrays_strings) {
+//                System.out.println("WebDriver() createListMoney(): arrays_strings = " + string);
+            }
             ArrayList<String> list_value = AtherMethod.createArray(arrays_strings);
 
             addResult(AtherMethod.checkStringSizeArray(list_value));

@@ -1,6 +1,10 @@
+import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AtherMethod {
+
 
     //среднеарифмет из строки с проверкой на возможное равенство
     public static Integer average(ArrayList<String> value) {
@@ -9,7 +13,7 @@ public class AtherMethod {
             result = Integer.parseInt(value.get(1));
 //            System.out.println("AtherMethod() avarage(value ==): " + result);
         } else {
-            result = (int) (Integer.parseInt(value.get(1)) - Integer.parseInt(value.get(0))) / 2;
+            result = (Integer.parseInt(value.get(1)) - Integer.parseInt(value.get(0))) / 2;
 //            System.out.println("AtherMethod() avarage(): " + result);
         }
         return result;
@@ -21,13 +25,14 @@ public class AtherMethod {
     }
 
     // фильтр без пробельный и только цифры
-    private static String replaceAllStringFilterNoSpace(String text) {
+    public static String replaceAllStringFilterNoSpace(String text) {
         String check_string = text.replaceAll("[^0-9]", "");
         return check_string.replaceAll("\\s+", "");
     }
 
     public static ArrayList<String> createArray(String[] array) {
         ArrayList<String> list_value = new ArrayList<>();
+
 
         for (int i = 0; i < array.length; i++) {
 
@@ -36,6 +41,7 @@ public class AtherMethod {
                 list_value.add(valueCheck(array, value));
             }
         }
+//        System.out.println("AtherMethod() createArray(): " + list_value.toString());
         return list_value;
 
     }
@@ -95,4 +101,16 @@ public class AtherMethod {
         }
         return result;
     }
+
+    public static boolean ifElseContains(String arg, Elements elements) {
+        boolean flag = false;
+        for (int i = 0; i < elements.size(); i++) {
+            if (arg.equals(elements.get(i).text())) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
 }
