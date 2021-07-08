@@ -6,7 +6,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Parser {
+public class ParserJsoupTest {
 
     private static ArrayList<String> money_list = new ArrayList<>();
 
