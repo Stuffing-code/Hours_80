@@ -1,5 +1,6 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -22,8 +23,12 @@ public class WorkDriver {
     private static ArrayList<String> tag_list = new ArrayList<>();
     private static final String ZP = "Не указана.";
     private static HashSet<String> tag_link = new HashSet<>();
-    private  HashMap<String, List<String>> dir_tag_and_value = new HashMap<>();
+    private static HashMap<String, List<String>> dir_tag_and_value = new HashMap<>();
+    private static ArrayList<String> tag_money = new ArrayList<>();
 
+    public static HashMap<String, List<String>> getDir_tag_and_value() {
+        return dir_tag_and_value;
+    }
 
     public static HashSet<String> getTag_link() {
         return tag_link;
@@ -31,14 +36,6 @@ public class WorkDriver {
 
     public static ArrayList<String> getUrl_list() {
         return url_list;
-    }
-
-    public static ArrayList<String> getTitle_list() {
-        return title_list;
-    }
-
-    public static ArrayList<String> getMoney_list_solve_median() {
-        return money_list_solve_median;
     }
 
     public void addResult(Integer result) {
@@ -53,20 +50,8 @@ public class WorkDriver {
         driver.get(text_site);
     }
 
-    public void openNewTab(String url) {
-        driver.get(url);
-    }
-
-    public String currentUrl() {
-        return driver.getCurrentUrl();
-    }
-
     public void quit() {
         driver.quit();
-    }
-
-    public void timeOutdriver() {
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     public void clickButtonByLinkText(String text) {
@@ -91,51 +76,70 @@ public class WorkDriver {
     public void createTagList(Elements elements_page) {
 
         for (int i = 0; i < elements_page.size(); i++) {
-            if (i < elements_page.size() - 1) {
-                System.out.print(elements_page.get(i).text() + ", ");
-            } else {
-                System.out.print(elements_page.get(i).text() + ".");
-            }
+//            if (i < elements_page.size() - 1) {
+//                System.out.print(elements_page.get(i).text() + ", ");
+//            } else {
+//                System.out.print(elements_page.get(i).text() + ".");
+//            }
             tag_link.add(elements_page.get(i).text());
 
         }
-//
-//        for (Element el :
-//                elements_page) {
-//            System.out.print(el.text() + " ");
-//        }
     }
 
-    public HashMap<String, List<String>> createDir(HashSet<String> hashMap, ArrayList<String> urls, String cssQuery_tag_list_contains, String cssQuery_tag_zp) throws IOException {
-        for (String tag :
-                hashMap) {
-//            System.out.println("WebDriver() createDir(): начало проверки тэга " + tag);
-            System.out.println("Начало проверки тэга " + tag);
-            ArrayList<String> tag_money = new ArrayList<>();
-            for (int i = 0; i < urls.size(); i++) {
-                boolean flag = createElements(urls.get(i), cssQuery_tag_list_contains).text().contains(tag);
-                if (flag) {
-                    String[] value = createElements(urls.get(i), cssQuery_tag_zp).text().split("до");
-                    if (!createElements(urls.get(i), cssQuery_tag_zp).text().equals("з/п не указана")) {
-                        ArrayList<String> array = AtherMethod.createArray(value);
+    public HashMap<String, List<String>> createDir(ArrayList<String> urls, String cssQuery, String cssQuery_tag_zp) throws IOException {
 
-//                        System.out.println("WebDriver() createDir() value_list :" + array.toString());
-                        tag_money.addAll(Collections.singleton(String.valueOf(AtherMethod.checkStringSizeArray(array))));
-//                        System.out.println("WebDriver() createDir():"  + tag_money.toString());
-
-                        dir_tag_and_value.put(tag, tag_money);
-                    }
+        for (String url :
+                urls) {
+            tag_money.clear();
+            Elements select_tags = Jsoup.connect(url).get().select(cssQuery);
+            Elements select_zp = Jsoup.connect(url).get().select(cssQuery_tag_zp);
+            String value = select_tags.text();
+            String[] value_tag_zp = Jsoup.connect(url).get().select(cssQuery_tag_zp).text().split("до");
+//            System.out.println("WebDriver() createTagListCssQuery(): " + value);
+            createTagList(select_tags);
+            for (Element el :
+                    select_tags) {
+                if (!Jsoup.connect(url).get().select(cssQuery_tag_zp).text().equals("з/п не указана")) {
+                        ArrayList<String> array = AtherMethod.createArray(value_tag_zp);
+                    dir_tag_and_value.computeIfAbsent(el.text(), k -> new ArrayList<>()).addAll(array);
                 }
+//                System.out.println(dir_tag_and_value.toString());
             }
         }
         return dir_tag_and_value;
     }
 
+//    public HashMap<String, List<String>> createDir(HashSet<String> hashSet, ArrayList<String> urls, String cssQuery_tag_list_contains, String cssQuery_tag_zp) throws IOException {
+//        for (String tag :
+//                hashSet) {
+////            System.out.println("WebDriver() createDir(): начало проверки тэга " + tag);
+////            System.out.println("Начало проверки тэга " + tag);
+//            ArrayList<String> tag_money = new ArrayList<>();
+//            for (int i = 0; i < urls.size(); i++) {
+//                boolean flag = createElements(urls.get(i), cssQuery_tag_list_contains).text().contains(tag);
+//                if (flag) {
+//                    String[] value = Jsoup.connect(urls.get(i)).get().select(cssQuery_tag_zp).text().split("до");
+////                    String[] value = createElements(urls.get(i), cssQuery_tag_zp).text().split("до");
+//                    if (!Jsoup.connect(urls.get(i)).get().select(cssQuery_tag_zp).text().equals("з/п не указана")) {
+//                        ArrayList<String> array = AtherMethod.createArray(value);
+//
+////                        System.out.println("WebDriver() createDir() value_list :" + array.toString());
+//                        tag_money.addAll(Collections.singleton(String.valueOf(AtherMethod.checkStringSizeArray(array))));
+////                        System.out.println("WebDriver() createDir():"  + tag_money.toString());
+//
+//                        dir_tag_and_value.put(tag, tag_money);
+//                    }
+//                }
+//            }
+//        }
+//        return dir_tag_and_value;
+//    }
+
     public void printDirKeyAndValue(HashMap<String, List<String>> dir, ArrayList<String> arrayMedian) {
         dir.forEach((key, value) -> {
             System.out.print("У ключевого навыка " + key + " выборка зарплат зарплаты: ");
             for (int i = 0; i < value.size(); i++) {
-                if (i < value.size() -1) {
+                if (i < value.size() - 1) {
                     System.out.print(value.get(i) + ", ");
                 } else {
                     System.out.print(value.get(i) + " рублей.");
@@ -157,10 +161,10 @@ public class WorkDriver {
                 list_link) {
 
             String[] arrays_strings = el.getText().split(" ");
-            for (String string :
-                    arrays_strings) {
-//                System.out.println("WebDriver() createListMoney(): arrays_strings = " + string);
-            }
+//            for (String string :
+//                    arrays_strings) {
+////                System.out.println("WebDriver() createListMoney(): arrays_strings = " + string);
+//            }
             ArrayList<String> list_value = AtherMethod.createArray(arrays_strings);
 
             addResult(AtherMethod.checkStringSizeArray(list_value));
@@ -195,18 +199,8 @@ public class WorkDriver {
         }
     }
 
-    public void scrollPage(int value) {
-        for (int i = 0; i < value; i++) {
-            driver.findElement(By.tagName("body")).sendKeys(Keys.PAGE_DOWN);
-        }
-    }
-
     public void sendTextSearch(String text_search, String xpath) {
         driver.findElement(By.xpath(xpath)).sendKeys(text_search);
-    }
-
-    public void clearTest() {
-        driver.findElement(By.className("gLFyf")).clear();
     }
 
 }

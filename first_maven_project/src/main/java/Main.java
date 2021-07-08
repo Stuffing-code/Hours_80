@@ -29,10 +29,12 @@ public class Main {
         ArrayList<String> list_urls_vacancy = new ArrayList<>();
         ArrayList<String> list_title_vacancy = new ArrayList<>();
         HashSet<String> tag_link = new HashSet<>();
+        HashMap<String, List<String>> dir_key_and_value = new HashMap<>();
 
         // open browser
         chr.openSite("https://hh.ru/");
-        chr.sendTextSearch("Junior java developer science", xpath_search);
+//        chr.sendTextSearch("C# developer", xpath_search);
+        chr.sendTextSearch("Delphi", xpath_search);
         chr.clickButtonXpath(xpath_button);
 
         try {
@@ -44,10 +46,19 @@ public class Main {
                 // парсим ссылоки на вакансии
                 chr.createListUrlAndTitleVacancy(cssQuery_title_and_url);
                 list_urls_vacancy = WorkDriver.getUrl_list();
-                list_title_vacancy = WorkDriver.getTitle_list();
+                //todo необходимо сделать создание словаря сразу при проходе по тэгам
+                chr.createDir(list_urls_vacancy, cssQuery_tag_list, cssQuery_tag_zp);
+//                tag_link = WorkDriver.getTag_link();
+//                System.out.println(tag_link.toString());
+//                chr.createDir(tag_link, list_urls_vacancy, cssQuery_tag_list, cssQuery_tag_zp);
+                dir_key_and_value = WorkDriver.getDir_tag_and_value();
+                System.out.println("я тут");
+
+
+//                list_title_vacancy = WorkDriver.getTitle_list();
 
                 // парсим для получения списка зп включая их отсутсвие
-                list_money_and_null_value = chr.createListMoneAndNullValue(cssQuery_all);
+//                list_money_and_null_value = chr.createListMoneAndNullValue(cssQuery_all);
 
                 // переходим дальше
                 chr.clickButtonByLinkText("дальше");
@@ -62,30 +73,30 @@ public class Main {
         Median.printMedianValue(list_money_solve_median);
         System.out.println();
 
-        System.out.println("Ожидайте идет формирование списка");
+//        System.out.println("Ожидайте идет формирование списка");
         // визуализация вакансий ссылок на них и зарплат, а также список ключевых навыков
-        for (int i = 0; i < list_urls_vacancy.size(); i++) {
-            System.out.println((i + 1) + ") " + list_title_vacancy.get(i));
-            System.out.println("\tURL: " + list_urls_vacancy.get(i));
-            System.out.println("\tЗаработная плата: " + list_money_and_null_value.get(i));
-            System.out.print("\tКлючевые навыки: ");
-            Elements elements_key = chr.createElements(list_urls_vacancy.get(i), cssQuery_tag_list);
-            String value = chr.createElements(list_urls_vacancy.get(i), cssQuery_tag_zp).text();
-            if (!value.equals("з/п не указана")) {
-                chr.createTagList(elements_key);
-            }
-
-            tag_link = WorkDriver.getTag_link();
-
-            System.out.println("\n");
-        }
-        System.out.println("Список сформирован: ");
-        System.out.println(tag_link.toString());
+//        for (int i = 0; i < list_urls_vacancy.size(); i++) {
+////            System.out.println((i + 1) + ") " + list_title_vacancy.get(i));
+////            System.out.println("\tURL: " + list_urls_vacancy.get(i));
+////            System.out.println("\tЗаработная плата: " + list_money_and_null_value.get(i));
+////            System.out.print("\tКлючевые навыки: ");
+//            Elements elements_key = chr.createElements(list_urls_vacancy.get(i), cssQuery_tag_list);
+//            String value = chr.createElements(list_urls_vacancy.get(i), cssQuery_tag_zp).text();
+//            if (!value.equals("з/п не указана")) {
+//                chr.createTagList(elements_key);
+//            }
+//
+//            tag_link = WorkDriver.getTag_link();
+//
+////            System.out.println("\n");
+//        }
+//        System.out.println("Список сформирован: ");
+//        System.out.println(tag_link.toString());
 
 
         System.out.println("Ожидайте идет проверка");
         // создаем словарь с ключами = ключевым наввыкам и значениями = заработной плате
-        HashMap<String, List<String>> dir_key_and_value = chr.createDir(tag_link, list_urls_vacancy, cssQuery_tag_list, cssQuery_tag_zp);
+//        HashMap<String, List<String>> dir_key_and_value = chr.createDir(tag_link, list_urls_vacancy, cssQuery_tag_list, cssQuery_tag_zp);
 
         System.out.println("конец проверки");
         System.out.println();
@@ -94,6 +105,6 @@ public class Main {
         ArrayList<String> finalList_money_solve_median = list_money_solve_median;
         chr.printDirKeyAndValue(dir_key_and_value, finalList_money_solve_median);
 
-        chr.quit();
+//        chr.quit();
     }
 }
