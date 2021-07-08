@@ -1,3 +1,6 @@
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -6,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -69,6 +73,19 @@ public class WorkDriver {
             addResult(AtherMethod.checkStringSizeArray(list_value));
         }
         return getMoney_list();
+    }
+
+    // множество ссылок на вкансии
+    public HashSet<String> createListUrl(String cssQuery) {
+        HashSet<String> urls = new HashSet<>();
+
+        List<WebElement> urls_page = driver.findElements(By.cssSelector(cssQuery));
+        for (WebElement s:
+                urls_page) {
+            System.out.println((s.getAttribute("href")));
+//            urls.add(s.getAttribute("href"));
+        }
+        return urls;
     }
 
     public void scrollPage(int value) {

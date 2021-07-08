@@ -2,11 +2,16 @@ import java.util.ArrayList;
 
 public class AtherMethod {
 
-    //среднеарифмет из строки
+    //среднеарифмет из строки с проверкой на возможное равенство
     public static Integer average(ArrayList<String> value) {
         int result;
-        result = (int) (Integer.parseInt(value.get(1)) - Integer.parseInt(value.get(0))) / 2;
-        System.out.println("AtherMethod() avarage(): " + result);
+        if (Integer.parseInt(value.get(1)) == Integer.parseInt(value.get(0))) {
+            result = Integer.parseInt(value.get(1));
+            System.out.println("AtherMethod() avarage(value ==): " + result);
+        } else {
+            result = (int) (Integer.parseInt(value.get(1)) - Integer.parseInt(value.get(0))) / 2;
+            System.out.println("AtherMethod() avarage(): " + result);
+        }
         return result;
     }
 

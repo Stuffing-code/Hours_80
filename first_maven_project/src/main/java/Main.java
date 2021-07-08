@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException {
         String cssQuery_money = "span[data-qa=vacancy-serp__vacancy-compensation]";
+        String cssQuery_bloko_link = "a[class=bloko_link";
 
         String xpath_search = "/html/body/div[5]/div[3]/div/div/div[3]/div/div/form/div/div[1]/div/input";
         String xpath_button = "/html/body/div[5]/div[3]/div/div/div[3]/div/div/form/div/div[2]/button/span[2]";
@@ -19,7 +20,7 @@ public class Main {
         ArrayList<String> list_money = new ArrayList<>();
 
         chr.openSite("https://hh.ru/");
-        chr.sendTextSearch("Шеф повар", xpath_search);
+        chr.sendTextSearch("Pascal", xpath_search);
         chr.clickButtonXpath(xpath_button);
 
         try {
@@ -27,11 +28,15 @@ public class Main {
             while (true) {
                 // парсим страницу
                 list_money = chr.createListMoney(cssQuery_money);
+                // парсим на наличие ссылок на вакансии
+                chr.createListUrl(cssQuery_bloko_link);
                 // переходим дальше
                 chr.clickButtonByLinkText("дальше");
             }
         } catch (org.openqa.selenium.NoSuchElementException e) {
             System.out.println("end page");
+        } finally {
+            chr.quit();
         }
 
         // отоброжение масива
