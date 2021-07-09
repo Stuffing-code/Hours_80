@@ -3,7 +3,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,7 +10,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class WorkDriver {
 
@@ -22,7 +20,7 @@ public class WorkDriver {
     private static ArrayList<String> money_list = new ArrayList<>();
     private static ArrayList<String> tag_list = new ArrayList<>();
     private static final String ZP = "Не указана.";
-    private static HashSet<String> tag_link = new HashSet<>();
+    private static HashSet<Elements> tag_link = new HashSet<Elements>();
     private static HashMap<String, List<String>> dir_tag_and_value = new HashMap<>();
     private static ArrayList<String> tag_money = new ArrayList<>();
 
@@ -30,7 +28,7 @@ public class WorkDriver {
         return dir_tag_and_value;
     }
 
-    public static HashSet<String> getTag_link() {
+    public static HashSet<Elements> getTag_link() {
         return tag_link;
     }
 
@@ -73,39 +71,47 @@ public class WorkDriver {
     }
 
     // create Tag List и вывод сообщения на консоль при необходимости
-    public void createTagList(Elements elements_page) {
+//    public void createTagList(Elements elements_page) {
+//
+//        for (Element element : elements_page) {
+////            if (i < elements_page.size() - 1) {
+////                System.out.print(elements_page.get(i).text() + ", ");
+////            } else {
+////                System.out.print(elements_page.get(i).text() + ".");
+////            }
+//            tag_link.add(element.text());
+//
+//        }
+//    }
 
-        for (int i = 0; i < elements_page.size(); i++) {
-//            if (i < elements_page.size() - 1) {
-//                System.out.print(elements_page.get(i).text() + ", ");
-//            } else {
-//                System.out.print(elements_page.get(i).text() + ".");
-//            }
-            tag_link.add(elements_page.get(i).text());
+    public HashMap<String, List<String>> createDir(Elements select_tags, String[] value_tag_zp) throws IOException {
 
-        }
-    }
-
-    public HashMap<String, List<String>> createDir(ArrayList<String> urls, String cssQuery, String cssQuery_tag_zp) throws IOException {
-
-        for (String url :
-                urls) {
-            tag_money.clear();
-            Elements select_tags = Jsoup.connect(url).get().select(cssQuery);
-            Elements select_zp = Jsoup.connect(url).get().select(cssQuery_tag_zp);
-            String value = select_tags.text();
-            String[] value_tag_zp = Jsoup.connect(url).get().select(cssQuery_tag_zp).text().split("до");
+        tag_money.clear();
+        long long_time = System.currentTimeMillis();
+//        for (String url :
+//                urls) {
+//            Elements select_tags = Jsoup.connect(url).get().select(cssQuery_tag_list);
+//            String[] value_tag_zp = Jsoup.connect(url).get().select(cssQuery_tag_zp).text().split("до");
+////            Elements select_zp = Jsoup.connect(url).get().select(cssQuery_tag_zp);
+////            String value = select_tags.text();
+////            if (!Jsoup.connect(url).get().select(cssQuery_tag_zp).text().contains("з/п не указана")) {
+//////                    //todo замерить время
+////            }
+//            tag_link.add(select_tags);
 //            System.out.println("WebDriver() createTagListCssQuery(): " + value);
-            createTagList(select_tags);
-            for (Element el :
-                    select_tags) {
-                if (!Jsoup.connect(url).get().select(cssQuery_tag_zp).text().equals("з/п не указана")) {
-                        ArrayList<String> array = AtherMethod.createArray(value_tag_zp);
-                    dir_tag_and_value.computeIfAbsent(el.text(), k -> new ArrayList<>()).addAll(array);
-                }
+//            createTagList(select_tags);
+        for (Element el :
+                select_tags) {
+//                if (!Jsoup.connect(url).get().select(cssQuery_tag_zp).text().contains("з/п не указана")) {
+            ArrayList<String> array = AtherMethod.createArray(value_tag_zp);
+//                    //todo замерить время
+            dir_tag_and_value.computeIfAbsent(el.text(), k -> new ArrayList<>()).addAll(array);
+//                }
 //                System.out.println(dir_tag_and_value.toString());
-            }
         }
+        long lon_time_2 = System.currentTimeMillis();
+        System.out.println("Time. WebDriver(): createDir(): Element " + (lon_time_2 - long_time));
+//        }
         return dir_tag_and_value;
     }
 
@@ -189,13 +195,22 @@ public class WorkDriver {
     }
 
     // массив ссылок и названий вакансий
-    public void createListUrlAndTitleVacancy(String cssQuery) {
+    public void createListUrlAndTitleVacancy(String cssQuery, String cssQuery_tag_zp, String cssQuery_tag_list) throws IOException {
         List<WebElement> urls_page = driver.findElements(By.cssSelector(cssQuery));
         for (WebElement s :
                 urls_page) {
 //            System.out.println("WorkDriver() createListUrl(): " + s.getAttribute("href"));
-            url_list.add(s.getAttribute("href"));
-            title_list.add(s.getText());
+            if (!Jsoup.connect(s.getAttribute("href")).get().select(cssQuery_tag_zp).text().contains("з/п не указана")) {
+//                    //todo замерить время
+
+                url_list.add(s.getAttribute("href"));
+                title_list.add(s.getText());
+                long long_time = System.currentTimeMillis();
+                Elements select_tags = Jsoup.connect(s.getAttribute("href")).get().select(cssQuery_tag_list);
+                String[] value_tag_zp = Jsoup.connect(s.getAttribute("href")).get().select(cssQuery_tag_zp).text().split("до");
+                tag_link.add(select_tags);
+                createDir(select_tags, value_tag_zp);
+            }
         }
     }
 

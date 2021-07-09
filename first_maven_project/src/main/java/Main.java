@@ -34,7 +34,7 @@ public class Main {
         // open browser
         chr.openSite("https://hh.ru/");
 //        chr.sendTextSearch("C# developer", xpath_search);
-        chr.sendTextSearch("Delphi", xpath_search);
+        chr.sendTextSearch("Junior java developer", xpath_search);
         chr.clickButtonXpath(xpath_button);
 
         try {
@@ -44,10 +44,10 @@ public class Main {
                 list_money_solve_median = chr.createListMoney(cssQuery_money);
 
                 // парсим ссылоки на вакансии
-                chr.createListUrlAndTitleVacancy(cssQuery_title_and_url);
+                chr.createListUrlAndTitleVacancy(cssQuery_title_and_url, cssQuery_tag_zp, cssQuery_tag_list);
                 list_urls_vacancy = WorkDriver.getUrl_list();
                 //todo необходимо сделать создание словаря сразу при проходе по тэгам
-                chr.createDir(list_urls_vacancy, cssQuery_tag_list, cssQuery_tag_zp);
+//                chr.createDir(list_urls_vacancy, cssQuery_tag_list, cssQuery_tag_zp);
 //                tag_link = WorkDriver.getTag_link();
 //                System.out.println(tag_link.toString());
 //                chr.createDir(tag_link, list_urls_vacancy, cssQuery_tag_list, cssQuery_tag_zp);
