@@ -101,16 +101,4 @@ public class AtherMethod {
         }
         return result;
     }
-
-    public static boolean ifElseContains(String arg, Elements elements) {
-        boolean flag = false;
-        for (int i = 0; i < elements.size(); i++) {
-            if (arg.equals(elements.get(i).text())) {
-                flag = true;
-                break;
-            }
-        }
-        return flag;
-    }
-
 }

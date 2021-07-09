@@ -9,20 +9,25 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class WorkDriver {
 
     WebDriver driver;
     private static ArrayList<String> money_list_solve_median = new ArrayList<>();
     private static ArrayList<String> url_list = new ArrayList<>();
-    private static ArrayList<String> title_list = new ArrayList<>();
     private static ArrayList<String> money_list = new ArrayList<>();
-    private static ArrayList<String> tag_list = new ArrayList<>();
-    private static final String ZP = "Не указана.";
     private static HashSet<Elements> tag_link = new HashSet<Elements>();
     private static HashMap<String, List<String>> dir_tag_and_value = new HashMap<>();
+
     private static ArrayList<String> tag_money = new ArrayList<>();
+    private static ArrayList<String> tag_list = new ArrayList<>();
+    private static ArrayList<String> title_list = new ArrayList<>();
+
+    private static final String ZP = "Не указана.";
 
     public static HashMap<String, List<String>> getDir_tag_and_value() {
         return dir_tag_and_value;
@@ -52,6 +57,10 @@ public class WorkDriver {
         driver.quit();
     }
 
+    public String correctUrl() {
+        return driver.getCurrentUrl();
+    }
+
     public void clickButtonByLinkText(String text) {
         driver.findElement(By.linkText(text)).click();
     }
@@ -70,80 +79,19 @@ public class WorkDriver {
         return getPage(url_search).select(cssQuery);
     }
 
-    // create Tag List и вывод сообщения на консоль при необходимости
-//    public void createTagList(Elements elements_page) {
-//
-//        for (Element element : elements_page) {
-////            if (i < elements_page.size() - 1) {
-////                System.out.print(elements_page.get(i).text() + ", ");
-////            } else {
-////                System.out.print(elements_page.get(i).text() + ".");
-////            }
-//            tag_link.add(element.text());
-//
-//        }
-//    }
 
-    public HashMap<String, List<String>> createDir(Elements select_tags, String[] value_tag_zp) throws IOException {
+    public void createDir(Elements select_tags, String[] value_tag_zp) {
 
-        tag_money.clear();
-        long long_time = System.currentTimeMillis();
-//        for (String url :
-//                urls) {
-//            Elements select_tags = Jsoup.connect(url).get().select(cssQuery_tag_list);
-//            String[] value_tag_zp = Jsoup.connect(url).get().select(cssQuery_tag_zp).text().split("до");
-////            Elements select_zp = Jsoup.connect(url).get().select(cssQuery_tag_zp);
-////            String value = select_tags.text();
-////            if (!Jsoup.connect(url).get().select(cssQuery_tag_zp).text().contains("з/п не указана")) {
-//////                    //todo замерить время
-////            }
-//            tag_link.add(select_tags);
-//            System.out.println("WebDriver() createTagListCssQuery(): " + value);
-//            createTagList(select_tags);
         for (Element el :
                 select_tags) {
-//                if (!Jsoup.connect(url).get().select(cssQuery_tag_zp).text().contains("з/п не указана")) {
-            ArrayList<String> array = AtherMethod.createArray(value_tag_zp);
-//                    //todo замерить время
-            dir_tag_and_value.computeIfAbsent(el.text(), k -> new ArrayList<>()).addAll(array);
-//                }
-//                System.out.println(dir_tag_and_value.toString());
+            dir_tag_and_value.computeIfAbsent(el.text(), k -> new ArrayList<>()).addAll(AtherMethod.createArray(value_tag_zp));
         }
-        long lon_time_2 = System.currentTimeMillis();
-        System.out.println("Time. WebDriver(): createDir(): Element " + (lon_time_2 - long_time));
-//        }
-        return dir_tag_and_value;
     }
 
-//    public HashMap<String, List<String>> createDir(HashSet<String> hashSet, ArrayList<String> urls, String cssQuery_tag_list_contains, String cssQuery_tag_zp) throws IOException {
-//        for (String tag :
-//                hashSet) {
-////            System.out.println("WebDriver() createDir(): начало проверки тэга " + tag);
-////            System.out.println("Начало проверки тэга " + tag);
-//            ArrayList<String> tag_money = new ArrayList<>();
-//            for (int i = 0; i < urls.size(); i++) {
-//                boolean flag = createElements(urls.get(i), cssQuery_tag_list_contains).text().contains(tag);
-//                if (flag) {
-//                    String[] value = Jsoup.connect(urls.get(i)).get().select(cssQuery_tag_zp).text().split("до");
-////                    String[] value = createElements(urls.get(i), cssQuery_tag_zp).text().split("до");
-//                    if (!Jsoup.connect(urls.get(i)).get().select(cssQuery_tag_zp).text().equals("з/п не указана")) {
-//                        ArrayList<String> array = AtherMethod.createArray(value);
-//
-////                        System.out.println("WebDriver() createDir() value_list :" + array.toString());
-//                        tag_money.addAll(Collections.singleton(String.valueOf(AtherMethod.checkStringSizeArray(array))));
-////                        System.out.println("WebDriver() createDir():"  + tag_money.toString());
-//
-//                        dir_tag_and_value.put(tag, tag_money);
-//                    }
-//                }
-//            }
-//        }
-//        return dir_tag_and_value;
-//    }
 
     public void printDirKeyAndValue(HashMap<String, List<String>> dir, ArrayList<String> arrayMedian) {
         dir.forEach((key, value) -> {
-            System.out.print("У ключевого навыка " + key + " выборка зарплат зарплаты: ");
+            System.out.print("У вакансий с ключевым навыком " + key + " выборка зарплат: ");
             for (int i = 0; i < value.size(); i++) {
                 if (i < value.size() - 1) {
                     System.out.print(value.get(i) + ", ");
@@ -167,10 +115,7 @@ public class WorkDriver {
                 list_link) {
 
             String[] arrays_strings = el.getText().split(" ");
-//            for (String string :
-//                    arrays_strings) {
-////                System.out.println("WebDriver() createListMoney(): arrays_strings = " + string);
-//            }
+
             ArrayList<String> list_value = AtherMethod.createArray(arrays_strings);
 
             addResult(AtherMethod.checkStringSizeArray(list_value));
@@ -195,22 +140,22 @@ public class WorkDriver {
     }
 
     // массив ссылок и названий вакансий
-    public void createListUrlAndTitleVacancy(String cssQuery, String cssQuery_tag_zp, String cssQuery_tag_list) throws IOException {
-        List<WebElement> urls_page = driver.findElements(By.cssSelector(cssQuery));
-        for (WebElement s :
-                urls_page) {
-//            System.out.println("WorkDriver() createListUrl(): " + s.getAttribute("href"));
-            if (!Jsoup.connect(s.getAttribute("href")).get().select(cssQuery_tag_zp).text().contains("з/п не указана")) {
-//                    //todo замерить время
+    public void createListsTagsTitlesUrls(String cssQuery, String cssQuery_tag_zp, String cssQuery_tag_list, String correctUrl) throws IOException {
+//        List<WebElement> urls_page = driver.findElements(By.cssSelector(cssQuery));
+        Elements urls_page = Jsoup.connect(correctUrl).maxBodySize(Integer.MAX_VALUE).get().select(cssQuery);
 
-                url_list.add(s.getAttribute("href"));
-                title_list.add(s.getText());
-                long long_time = System.currentTimeMillis();
-                Elements select_tags = Jsoup.connect(s.getAttribute("href")).get().select(cssQuery_tag_list);
-                String[] value_tag_zp = Jsoup.connect(s.getAttribute("href")).get().select(cssQuery_tag_zp).text().split("до");
-                tag_link.add(select_tags);
-                createDir(select_tags, value_tag_zp);
-            }
+        for (Element url :
+                urls_page) {
+//                url_list.add(s.getAttribute("href"));
+//                title_list.add(s.getText());
+            System.out.println(url.text());
+            long start_pars = System.currentTimeMillis();
+            Elements select_tags = Jsoup.connect(url.attr("href")).get().select(cssQuery_tag_list);
+            String[] value_tag_zp = Jsoup.connect(url.attr("href")).get().select(cssQuery_tag_zp).text().split("до");
+//                tag_link.add(select_tags);
+            createDir(select_tags, value_tag_zp);
+            long stop_pars = System.currentTimeMillis();
+            System.out.println("createListsTagsTitlesUrls(): проход по url " + (stop_pars - start_pars));
         }
     }
 
